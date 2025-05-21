@@ -1,0 +1,11 @@
+name: nginx
+
+services:
+  nginx:
+    build:
+      context: ./srcs/nginx/
+      dockerfile: Dockerfile
+    image: inception-nginx
+    ports:
+      - "8443:443"
+  
