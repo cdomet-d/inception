@@ -1,7 +1,6 @@
 #!/bin/sh
 
 if [ -z "$(ls -A /var/www/html)" ]; then
-
 	cat <<- EOF
 		Wordpress volume is empty. 
 		Downloading Wordpress from https://wordpress.org/latest.tar.gz...
