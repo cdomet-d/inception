@@ -1,3 +1,4 @@
 FROM alpine:3.20
-RUN apk add --update --no-cache mariadb \
-	mariadb-client
+RUN apk add --update --no-cache mariadb
+
+CMD ["./sh"]

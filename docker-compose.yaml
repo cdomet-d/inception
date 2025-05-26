@@ -1,4 +1,4 @@
-name: nginx
+name: Inception
 
 services:
   nginx:
@@ -17,5 +17,26 @@ services:
     image: inception-wp
     volumes:
       - wordpress-data:/var/www/html
+  mariadb:
+    build:
+      context: ./srcs/mariadb
+      dockerfile: Dockerfile
+    image: inception-mariadb
+    secrets:
+      - root
+      - user
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/root
+      MYSQL_PASSWORD_FILE: /run/secrets/user
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp-manager
 volumes:
   wordpress-data:
+  mariadb-data:
+secrets:
+  root:
+    file: ~/docker-secrets/root
+  user:
+    file: ~/docker-secrets/user
