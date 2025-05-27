@@ -1,4 +1,7 @@
 #!/bin/sh
+# entrypoint-wp.sh
+
+set -eu
 
 if [ -z "$(ls -A /var/www/html)" ]; then
 	cat <<- EOF

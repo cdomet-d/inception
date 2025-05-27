@@ -1,7 +1,20 @@
-#!/bin/ash
+#!/bin/sh
 #db-init.sh
 
-set -e
+# exit on error [e], on unset variables [u]
+set -eu
+
+error() {
+	echo "FATAL: $*" >&2
+	exit 1
+}
+
+[ -s "$MYSQL_ROOT_PASSWORD_FILE" ] || error "Empty or missing root password file"
+[ -s "$MYSQL_PASSWORD_FILE" ] || error "Empty or missing user password file"
+
+
+ROOT_PW="$(cat "$MYSQL_ROOT_PASSWORD_FILE")"
+USER_PW="$(cat "$MYSQL_PASSWORD_FILE")"
 
 if [ -z "$(ls -A /var/lib/mysql)" ]; then
 	cat <<- EOF
@@ -11,25 +24,32 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 	EOF
 
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+
 	mysqld --user=mysql --bootstrap <<- EOSQL
-	UPDATE mysql.user SET Password=PASSWORD($(cat $MYSQL_ROOT_PASSWORD_FILE))
+	-- set root password
+	UPDATE mysql.user SET Password=PASSWORD('${ROOT_PW}')
+	-- remove any anonymous users
 	DELETE FROM mysql.user WHERE User='';
+	-- remove remote root access
 	DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost');
-	DROP DATABASE IF EXISTS 'test'
-	CREATE DATABASE IF NOT EXISTS wordpress;
-	CREATE USER IF NOT EXISTS 'wp-manager'@'%' IDENTIFIED BY '$(cat $MYSQL_PASSWORD_FILE)';
-	GRANT ALL PRIVILEGES ON wordpress.* TO 'wp-manager'@'%;
+	-- delete default database test
+	DROP DATABASE IF EXISTS test
+	-- creating wp database & user from env
+	CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+	CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '${USER_PW}';
+	GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO 'wp-manager'@'%;
+	-- immediatly applies newly set priviledges
 	FLUSH PRIVILEGES;
 
-EOSQL
+	EOSQL
+
+	cat <<- EOF
+
+		Sucessfully initialized ${MYSQL_DATABASE}
+		Successfully created user ${MYSQL_USER}
+
+	EOF
 
 fi
-
-cat <<- EOF
-
-	Successfully created database WORDPRESS
-	Succressfully create user WP-MANAGER
-
-EOF
 
 exec "$@"
