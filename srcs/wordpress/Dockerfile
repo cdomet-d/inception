@@ -19,6 +19,6 @@ RUN apk add --update --no-cache \
 	php-zip \
 	# Performance optimisation cache
 	php-opcache
-COPY wp.sh /wp.sh
-ENTRYPOINT ["/wp.sh"]
+COPY entrypoint-wp.sh /entrypoint-wp.sh
+ENTRYPOINT ["/entrypoint-wp.sh"]
 CMD ["php-fpm83", "-F"]
