@@ -18,7 +18,18 @@ RUN apk add --update --no-cache \
 	# Allows .zip file handling
 	php-zip \
 	# Performance optimisation cache
-	php-opcache
+	php-opcache \
+	&& getent group www-data || addgroup -S www-data \
+	&& adduser -S -G www-data www-data \
+	&& mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html \
+	&& chown -R www-data:www-data /var/log/php83
+
 COPY entrypoint-wp.sh /entrypoint-wp.sh
+
+RUN chown www-data:www-data /entrypoint-wp.sh && chmod 700 /entrypoint-wp.sh
+
+USER www-data
+
 ENTRYPOINT ["/entrypoint-wp.sh"]
+
 CMD ["php-fpm83", "-F"]

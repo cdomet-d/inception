@@ -11,6 +11,7 @@ error() {
 command -v curl >/dev/null 2>&1 || error "curl needed but not found"
 command -v tar >/dev/null 2>&1 || error "tar needed but not found"
 
+echo "User is: $(whoami)"
 
 if [ -z "$(ls -A /var/www/html)" ]; then
 	cat <<-EOF
@@ -30,10 +31,9 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 	EOF
 	rm latest.tar.gz
 
-	chown nginx:nginx
 	cat <<-EOF
 		Wordpress files ready at /var/www/html
-		# $(ls /var/www/html)
+		$(ls /var/www/html)
 	EOF
 else
 	cat <<-EOF
