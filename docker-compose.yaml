@@ -10,6 +10,9 @@ services:
       - "8443:443"
     volumes:
       - wordpress-data:/var/www/html
+    secrets:
+      - cert.pem
+      - key.pem
 
   wordpress:
     build:
@@ -25,6 +28,8 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: wp-manager
       WORDPRESS_DB_PASSWORD: /run/secrets/user
+    secrets:
+      - user
 
   mariadb:
     build:
@@ -41,11 +46,17 @@ services:
       MYSQL_PASSWORD_FILE: /run/secrets/user
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp-manager
+
 volumes:
   wordpress-data:
   mariadb-data:
+
 secrets:
   root:
     file: ~/docker-secrets/root
   user:
     file: ~/docker-secrets/user
+  cert.pem:
+    file: ~/docker-secrets/cert.pem
+  key.pem: 
+    file: ~/docker-secrets/key.pem

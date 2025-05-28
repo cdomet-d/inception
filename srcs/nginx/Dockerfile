@@ -8,6 +8,4 @@ COPY ./conf/default.conf etc/nginx/http.d/default.conf
 
 EXPOSE 80 443
 
-USER nginx
-
 CMD ["nginx", "-g", "daemon off;"]
