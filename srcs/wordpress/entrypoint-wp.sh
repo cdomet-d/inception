@@ -19,6 +19,9 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 		Downloading Wordpress from https://wordpress.org/latest.tar.gz...
 	EOF
 	curl -sSfLO https://wordpress.org/latest.tar.gz || error "Failed to download Wordpress"
+	curl -sSfLO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar || error "Failed to download wp-cli"
+
+	chmod +x wp-cli.phar && mv-cli.phar /usr/local/bin/wp
 
 	cat <<-EOF
 		Extracting latest.tar.gz into Wordpress volume [/var/www/html]
@@ -31,10 +34,7 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 	EOF
 	rm latest.tar.gz
 
-	cat <<-EOF
-		Wordpress files ready at /var/www/html
-		$(ls /var/www/html)
-	EOF
+	wp core install --url=cdomet-d.42.fr --title="cdomet-d's blog" --admin_user=wpsu --admin_password=
 else
 	cat <<-EOF
 		Volume is already populated
@@ -42,4 +42,5 @@ else
 	EOF
 fi
 
+$ wp core install --url=example.com --title=Example --admin_user=supervisor --admin_password=strongpassword --admin_email=info@example.com
 exec "$@"
