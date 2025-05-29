@@ -7,22 +7,23 @@ services:
       dockerfile: Dockerfile
     image: inception-nginx
     ports:
-      - "8443:443"
+      - "443:443"
+      - "80:80"
     volumes:
-      - wordpress-data:/var/www/html
+      - wp-data:/var/www/html
     secrets:
       - cert.pem
       - key.pem
 
-  wordpress:
+  wp:
     build:
       context: ./srcs/wordpress/
       dockerfile: Dockerfile
     depends_on:
-      - mariadb
+      - db
     image: inception-wp
     volumes:
-      - wordpress-data:/var/www/html
+      - wp-data:/var/www/html
     environment:
       WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_NAME: wordpress
@@ -31,7 +32,7 @@ services:
     secrets:
       - user
 
-  mariadb:
+  db:
     build:
       context: ./srcs/mariadb
       dockerfile: Dockerfile
@@ -40,7 +41,7 @@ services:
       - root
       - user
     volumes:
-      - mariadb-data:/var/lib/mysql
+      - mdb-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/root
       MYSQL_PASSWORD_FILE: /run/secrets/user
@@ -48,8 +49,13 @@ services:
       MYSQL_USER: wp-manager
 
 volumes:
-  wordpress-data:
-  mariadb-data:
+  wp-data:
+  mdb-data:
+
+networks:
+  inception:
+    driver: bridge
+    name: inception
 
 secrets:
   root:

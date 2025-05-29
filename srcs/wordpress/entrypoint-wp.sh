@@ -18,7 +18,7 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 		Wordpress volume is empty. 
 		Downloading Wordpress from https://wordpress.org/latest.tar.gz...
 	EOF
-	curl -fLO https://wordpress.org/latest.tar.gz || error "Failed to download Wordpress"
+	curl -sSfLO https://wordpress.org/latest.tar.gz || error "Failed to download Wordpress"
 
 	cat <<-EOF
 		Extracting latest.tar.gz into Wordpress volume [/var/www/html]

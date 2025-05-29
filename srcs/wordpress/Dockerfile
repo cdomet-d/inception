@@ -24,12 +24,15 @@ RUN apk add --update --no-cache \
 	&& mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html \
 	&& chown -R www-data:www-data /var/log/php83
 
-COPY entrypoint-wp.sh /entrypoint-wp.sh
+WORKDIR /home/www-data
 
-RUN chown www-data:www-data /entrypoint-wp.sh && chmod 700 /entrypoint-wp.sh
+COPY www.conf /etc/php83/php-fpm.d/www.conf
+COPY entrypoint-wp.sh /home/data/entrypoint-wp.sh
+
+RUN chown www-data:www-data /home/data/entrypoint-wp.sh && chmod 700 /home/data/entrypoint-wp.sh
 
 USER www-data
 
-ENTRYPOINT ["/entrypoint-wp.sh"]
+ENTRYPOINT ["/home/data/entrypoint-wp.sh"]
 
 CMD ["php-fpm83", "-F"]
