@@ -1,6 +1,7 @@
 FROM alpine:3.20
-RUN apk add --update --no-cache \
-	curl \
+RUN apk add --update --no-cache curl \
+	php83-cli \
+	php83-phar \
 	# Fast CGI for PHP
 	php-fpm \
 	# Enables MariaDB support
@@ -33,6 +34,6 @@ RUN chown www-data:www-data /home/data/entrypoint-wp.sh && chmod 700 /home/data/
 
 ENTRYPOINT ["/home/data/entrypoint-wp.sh"]
 
-USER www-data
+# USER www-data
 
 CMD ["php-fpm83", "-F"]

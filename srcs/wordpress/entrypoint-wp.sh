@@ -10,12 +10,15 @@ error() {
 
 command -v curl >/dev/null 2>&1 || error "curl needed but not found"
 command -v tar >/dev/null 2>&1 || error "tar needed but not found"
+
 [ -s "$WP_ADMIN_PW" ] || error "Empty or missing wordpress admin password file"
 [ -s "$WP_ADMIN_MAIL" ] || error "Empty or missing wordpress admin mail file"
+[ -s "$WORDPRESS_DB_PASSWORD" ] || error "Empty or missing database user password file"
 
 echo "User is: $(whoami)"
 
 WPPW="$(cat "$WP_ADMIN_PW")"
+DBWPPW="$(cat "$WORDPRESS_DB_PASSWORD")"
 WPMAIL="$(cat "$WP_ADMIN_MAIL")"
 
 if [ -z "$(ls -A /var/www/html)" ]; then
@@ -39,8 +42,23 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 	EOF
 	rm latest.tar.gz
 
-	if ! wp core is-installed --path /var/www/html --allow-root; then
-		wp core install --url=cdomet-d.42.fr --title="cdomet-d's blog" --admin_user=wpsu --admin_password="$WPPW" --admin_email="$WPMAIL" --path=/var/www/html --allow-root --skip-email
+	wp config create \
+		--path=/var/www/html \
+		--dbhost="${WORDPRESS_DB_HOST}" \
+		--dbname="${WORDPRESS_DB_NAME}" \
+		--dbuser="${WORDPRESS_DB_USER}" \
+		--dbpass="${DBWPPW}"
+
+	if ! wp core is-installed --path=/var/www/html --allow-root; then
+
+		wp core install \
+			--path=/var/www/html \
+			--url=cdomet-d.42.fr \
+			--title="cdomet-d's blog" \
+			--admin_user=wpsu --admin_password="$WPPW" \
+			--admin_email="$WPMAIL" \
+			--allow-root \
+			--skip-email
 	fi
 
 else
@@ -50,5 +68,4 @@ else
 	EOF
 fi
 
-# $ wp core install --url=example.com --title=Example --admin_user=supervisor --admin_password=strongpassword --admin_email=info@example.com
 exec "$@"

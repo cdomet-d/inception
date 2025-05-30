@@ -16,6 +16,8 @@ services:
       - key.pem
     depends_on:
       - wp
+    networks:
+      - inception
 
   wp:
     build:
@@ -28,16 +30,18 @@ services:
     volumes:
       - wp-data:/var/www/html
     environment:
-      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: wp-manager
-      WORDPRESS_DB_PASSWORD: /run/secrets/user
+      WORDPRESS_DB_PASSWORD: /run/secrets/db-user
       WP_ADMIN_PW: /run/secrets/wpsu
       WP_ADMIN_MAIL: /run/secrets/wpsu-mail
     secrets:
       - db-user
       - wpsu
       - wpsu-mail
+    networks:
+      - inception
 
   db:
     build:
@@ -59,6 +63,8 @@ services:
       interval: 2s
       timeout: 2s
       retries: 10
+    networks:
+      - inception
 
 volumes:
   wp-data:
