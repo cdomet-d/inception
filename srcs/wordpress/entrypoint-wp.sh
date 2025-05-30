@@ -10,8 +10,13 @@ error() {
 
 command -v curl >/dev/null 2>&1 || error "curl needed but not found"
 command -v tar >/dev/null 2>&1 || error "tar needed but not found"
+[ -s "$WP_ADMIN_PW" ] || error "Empty or missing wordpress admin password file"
+[ -s "$WP_ADMIN_MAIL" ] || error "Empty or missing wordpress admin mail file"
 
 echo "User is: $(whoami)"
+
+WPPW="$(cat "$WP_ADMIN_PW")"
+WPMAIL="$(cat "$WP_ADMIN_MAIL")"
 
 if [ -z "$(ls -A /var/www/html)" ]; then
 	cat <<-EOF
@@ -21,7 +26,7 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 	curl -sSfLO https://wordpress.org/latest.tar.gz || error "Failed to download Wordpress"
 	curl -sSfLO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar || error "Failed to download wp-cli"
 
-	chmod +x wp-cli.phar && mv-cli.phar /usr/local/bin/wp
+	chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp
 
 	cat <<-EOF
 		Extracting latest.tar.gz into Wordpress volume [/var/www/html]
@@ -34,7 +39,10 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 	EOF
 	rm latest.tar.gz
 
-	wp core install --url=cdomet-d.42.fr --title="cdomet-d's blog" --admin_user=wpsu --admin_password=
+	if ! wp core is-installed --path /var/www/html --allow-root; then
+		wp core install --url=cdomet-d.42.fr --title="cdomet-d's blog" --admin_user=wpsu --admin_password="$WPPW" --admin_email="$WPMAIL" --path=/var/www/html --allow-root --skip-email
+	fi
+
 else
 	cat <<-EOF
 		Volume is already populated
@@ -42,5 +50,5 @@ else
 	EOF
 fi
 
-$ wp core install --url=example.com --title=Example --admin_user=supervisor --admin_password=strongpassword --admin_email=info@example.com
+# $ wp core install --url=example.com --title=Example --admin_user=supervisor --admin_password=strongpassword --admin_email=info@example.com
 exec "$@"

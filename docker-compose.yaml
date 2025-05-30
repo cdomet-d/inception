@@ -14,13 +14,16 @@ services:
     secrets:
       - cert.pem
       - key.pem
+    depends_on:
+      - wp
 
   wp:
     build:
       context: ./srcs/wordpress/
       dockerfile: Dockerfile
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     image: inception-wp
     volumes:
       - wp-data:/var/www/html
@@ -29,8 +32,12 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: wp-manager
       WORDPRESS_DB_PASSWORD: /run/secrets/user
+      WP_ADMIN_PW: /run/secrets/wpsu
+      WP_ADMIN_MAIL: /run/secrets/wpsu-mail
     secrets:
-      - user
+      - db-user
+      - wpsu
+      - wpsu-mail
 
   db:
     build:
@@ -38,15 +45,20 @@ services:
       dockerfile: Dockerfile
     image: inception-mariadb
     secrets:
-      - root
-      - user
+      - db-root
+      - db-user
     volumes:
       - mdb-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/root
-      MYSQL_PASSWORD_FILE: /run/secrets/user
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-root
+      MYSQL_PASSWORD_FILE: /run/secrets/db-user
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp-manager
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
 
 volumes:
   wp-data:
@@ -58,13 +70,15 @@ networks:
     name: inception
 
 secrets:
-  root:
-    file: ~/docker-secrets/root
-  user:
-    file: ~/docker-secrets/user
+  db-root:
+    file: ~/docker-secrets/dbroot
+  db-user:
+    file: ~/docker-secrets/dbusr
   cert.pem:
     file: ~/docker-secrets/cert.pem
   key.pem: 
     file: ~/docker-secrets/key.pem
   wpsu:
-    file ~/docker-secrets/wpsupw
+    file: ~/docker-secrets/wpsupw
+  wpsu-mail:
+    file: ~/docker-secrets/wpsu-mail

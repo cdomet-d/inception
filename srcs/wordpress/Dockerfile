@@ -31,8 +31,8 @@ COPY entrypoint-wp.sh /home/data/entrypoint-wp.sh
 
 RUN chown www-data:www-data /home/data/entrypoint-wp.sh && chmod 700 /home/data/entrypoint-wp.sh
 
-USER www-data
-
 ENTRYPOINT ["/home/data/entrypoint-wp.sh"]
+
+USER www-data
 
 CMD ["php-fpm83", "-F"]

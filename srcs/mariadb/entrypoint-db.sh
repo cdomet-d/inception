@@ -15,31 +15,35 @@ ROOT_PW="$(cat "$MYSQL_ROOT_PASSWORD_FILE")"
 USER_PW="$(cat "$MYSQL_PASSWORD_FILE")"
 
 if [ -z "$(ls -A /var/lib/mysql)" ]; then
-	cat <<-EOF
+	echo "Running MariaDB initialization..."
+	mariadb-install-db --user=mysql --datadir=/var/lib/mysql >/var/log/mariadb-install.log 2>&1 > /dev/null
 
-		Running MariaDB initialization...
+	echo "MariaDB init complete"
 
-	EOF
+	mysqld --user=mysql &
 
-	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+	sleep 5
 
-	mysqld --user=mysql --bootstrap <<-EOSQL
+	mysql -u root <<-EOSQL 2>&1 > /dev/null
 		-- set root password
-		ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PW}'
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PW}';
 		-- remove any anonymous users
 		DELETE FROM mysql.user WHERE User='';
 		-- remove remote root access
 		DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost');
 		-- delete default database test
-		DROP DATABASE IF EXISTS test
-		-- creating wp database & user from env
-		CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
-		CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '${USER_PW}';
-		GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO 'wp-manager'@'%;
+		DROP DATABASE IF EXISTS test;
+		-- creating wp database & user from env and grants the user all priviledges
+		CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};
+		CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${USER_PW}';
+		GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';
 		-- immediatly applies newly set priviledges
 		FLUSH PRIVILEGES;
-
 	EOSQL
+
+	echo "Finished bootstrap"
+
+	mysqladmin -u root -p"$ROOT_PW" shutdown
 
 	cat <<-EOF
 
