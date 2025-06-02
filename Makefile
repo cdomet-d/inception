@@ -1,4 +1,6 @@
 all: 
+	echo "UID=$$(id -u)" > .env
+	echo "GID=$$(id -g)" >> .env
 	docker compose build
 
 re: fclean all
@@ -7,21 +9,18 @@ clean:
 	docker system prune -f
 
 make fclean: stop
-	doas rm -rf /home/cdomet-d/data
+	rm -rf /home/cdomet-d/data/wp-data/*
+	rm -rf /home/cdomet-d/data/mdb-data/*
 	@docker system prune -f -a
 
-run:
-	docker compose up
+run: all
+	docker compose up -d
 
 stop:
 	docker compose stop
 	docker compose down
 
-wpinstall:
-	docker compose stop wp
-	docker compose rm wp
-	docker volume rm inception_wp-data
-	docker compose up -d --build --force-recreate wp 
+wpscript: stop all run
 
 dbinstall : fclean all
 	docker compose run --rm -it db sh

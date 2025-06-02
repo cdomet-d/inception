@@ -4,6 +4,9 @@ services:
   nginx:
     restart: unless-stopped
     build:
+      args:
+        UID: ${UID}
+        GID: ${GID}
       context: ./srcs/nginx/
       dockerfile: Dockerfile
     image: inception-nginx
@@ -22,6 +25,9 @@ services:
   wp:
     restart: unless-stopped
     build:
+      args:
+        UID: ${UID}
+        GID: ${GID}
       context: ./srcs/wordpress/
       dockerfile: Dockerfile
     depends_on:
@@ -33,31 +39,36 @@ services:
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD: /run/secrets/db-usr-pw
       WORDPRESS_DB_USER: wp-manager
-      WORDPRESS_DB_PASSWORD: /run/secrets/db-user
-      WP_ADMIN_PW: /run/secrets/wpsu
-      WP_ADMIN_MAIL: /run/secrets/wpsu-mail
+      WP_ADMIN_MAIL: /run/secrets/wp-su-mail
+      WP_ADMIN_PW: /run/secrets/wp-su-pw
+      WP_USR_PW: /run/secrets/wp-usr-pw
     secrets:
-      - db-user
-      - wpsu
-      - wpsu-mail
+      - db-usr-pw
+      - wp-su-mail
+      - wp-su-pw
+      - wp-usr-pw
     networks:
       - inception
 
   db:
     restart: unless-stopped
     build:
+      args:
+        UID: ${UID}
+        GID: ${GID}
       context: ./srcs/mariadb
       dockerfile: Dockerfile
     image: inception-mariadb
     secrets:
-      - db-root
-      - db-user
+      - db-root-pw
+      - db-usr-pw
     volumes:
       - /home/cdomet-d/data/mdb-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-root
-      MYSQL_PASSWORD_FILE: /run/secrets/db-user
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-root-pw
+      MYSQL_PASSWORD_FILE: /run/secrets/db-usr-pw
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp-manager
     healthcheck:
@@ -74,15 +85,17 @@ networks:
     name: inception
 
 secrets:
-  db-root:
-    file: ~/docker-secrets/dbroot
-  db-user:
-    file: ~/docker-secrets/dbusr
+  db-root-pw:
+    file: ~/docker-secrets/db-root-pw
+  db-usr-pw:
+    file: ~/docker-secrets/db-usr-pw
+  wp-su-pw:
+    file: ~/docker-secrets/wp-su-pw
+  wp-usr-pw:
+    file: ~/docker-secrets/wp-usr-pw
+  wp-su-mail:
+    file: ~/docker-secrets/wp-su-mail
   cert.pem:
     file: ~/docker-secrets/cert.pem
   key.pem: 
     file: ~/docker-secrets/key.pem
-  wpsu:
-    file: ~/docker-secrets/wpsupw
-  wpsu-mail:
-    file: ~/docker-secrets/wpsu-mail

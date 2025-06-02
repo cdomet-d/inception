@@ -1,11 +1,20 @@
 FROM alpine:3.20
-RUN apk add --update --no-cache nginx openssl \
-	&& (getent group nginx || addgroup -S nginx) \
-	&& (id -u nginx >/dev/null 2>&1 || adduser -S -G nginx nginx) \
-	&& chown nginx:nginx /var/log/nginx
+
+ARG UID
+ARG GID
+
+ENV UID=$UID
+ENV GID=$GID
+
+RUN apk add --update --no-cache nginx openssl su-exec \
+	&& addgroup -g ${GID} nginx-usr \
+	&& adduser -D -u ${UID} -G nginx-usr nginx-usr \
+	&& chown -R ${UID}:${GID} /var/log/nginx /var/lib/nginx /run/nginx
 
 COPY ./conf/default.conf /etc/nginx/http.d/default.conf
 
 EXPOSE 443
+
+USER ${UID}:${GID}
 
 CMD ["nginx", "-g", "daemon off;"]

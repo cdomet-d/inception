@@ -14,13 +14,17 @@ error() {
 ROOT_PW="$(cat "$MYSQL_ROOT_PASSWORD_FILE")"
 USER_PW="$(cat "$MYSQL_PASSWORD_FILE")"
 
-if [ -z "$(ls -A var/lib/mysql)" ]; then
+if [ -z "$(ls -A /var/lib/mysql)" ]; then
 	echo "Running MariaDB initialization..."
-	mariadb-install-db --user=mysql --datadir=/var/lib/mysql >/var/log/mariadb-install.log 2>&1 > /dev/null
+
+	mariadb-install-db \
+	--user=${UID} \
+	--datadir=/var/lib/mysql > /var/log/mysql/mariadb-install.log \
+	|| error "During maria-db initialisation"
 
 	echo "MariaDB init complete"
 
-	mysqld --user=mysql &
+	su-exec "${UID}:${GID}" mysqld &
 
 	sleep 5
 
@@ -54,4 +58,4 @@ if [ -z "$(ls -A var/lib/mysql)" ]; then
 
 fi
 
-exec "$@"
+exec su-exec ${UID}:${GID} "$@"
