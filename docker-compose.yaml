@@ -2,15 +2,15 @@ name: Inception
 
 services:
   nginx:
+    restart: unless-stopped
     build:
       context: ./srcs/nginx/
       dockerfile: Dockerfile
     image: inception-nginx
     ports:
       - "443:443"
-      - "80:80"
     volumes:
-      - wp-data:/var/www/html
+      - /home/cdomet-d/data/wp-data:/var/www/html
     secrets:
       - cert.pem
       - key.pem
@@ -20,6 +20,7 @@ services:
       - inception
 
   wp:
+    restart: unless-stopped
     build:
       context: ./srcs/wordpress/
       dockerfile: Dockerfile
@@ -28,7 +29,7 @@ services:
         condition: service_healthy
     image: inception-wp
     volumes:
-      - wp-data:/var/www/html
+      - /home/cdomet-d/data/wp-data:/var/www/html
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: wordpress
@@ -44,6 +45,7 @@ services:
       - inception
 
   db:
+    restart: unless-stopped
     build:
       context: ./srcs/mariadb
       dockerfile: Dockerfile
@@ -52,7 +54,7 @@ services:
       - db-root
       - db-user
     volumes:
-      - mdb-data:/var/lib/mysql
+      - /home/cdomet-d/data/mdb-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-root
       MYSQL_PASSWORD_FILE: /run/secrets/db-user
@@ -65,10 +67,6 @@ services:
       retries: 10
     networks:
       - inception
-
-volumes:
-  wp-data:
-  mdb-data:
 
 networks:
   inception:

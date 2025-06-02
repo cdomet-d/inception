@@ -7,8 +7,8 @@ clean:
 	docker system prune -f
 
 make fclean: stop
-	@docker system prune -f -a --volumes
-	@docker volume ls -q | xargs docker volume rm
+	doas rm -rf /home/cdomet-d/data
+	@docker system prune -f -a
 
 run:
 	docker compose up

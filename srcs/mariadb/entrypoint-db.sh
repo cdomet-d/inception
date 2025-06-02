@@ -14,7 +14,7 @@ error() {
 ROOT_PW="$(cat "$MYSQL_ROOT_PASSWORD_FILE")"
 USER_PW="$(cat "$MYSQL_PASSWORD_FILE")"
 
-if [ -z "$(ls -A /var/lib/mysql)" ]; then
+if [ -z "$(ls -A var/lib/mysql)" ]; then
 	echo "Running MariaDB initialization..."
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql >/var/log/mariadb-install.log 2>&1 > /dev/null
 
