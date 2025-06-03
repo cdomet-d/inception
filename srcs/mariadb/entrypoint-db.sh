@@ -18,7 +18,7 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 	echo "Running MariaDB initialization..."
 
 	mariadb-install-db \
-	--user=${UID} \
+	--user="${UID}" \
 	--datadir=/var/lib/mysql > /var/log/mysql/mariadb-install.log \
 	|| error "During maria-db initialisation"
 
@@ -58,4 +58,4 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 
 fi
 
-exec su-exec ${UID}:${GID} "$@"
+exec su-exec "${UID}:${GID}" "$@"

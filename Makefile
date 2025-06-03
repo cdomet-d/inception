@@ -1,6 +1,6 @@
-all: 
-	echo "UID=$$(id -u)" > .env
-	echo "GID=$$(id -g)" >> .env
+all: stop
+	@echo "UID=$$(id -u)" > .env
+	@echo "GID=$$(id -g)" >> .env
 	docker compose build
 
 re: fclean all

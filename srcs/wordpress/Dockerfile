@@ -4,8 +4,9 @@ ARG GID
 
 ENV UID=$UID
 ENV GID=$GID
+ENV PATH="/home/utils/wp:${PATH}"
 
-RUN apk add --update --no-cache curl php83-cli php83-phar php-fpm \
+RUN apk add --update --no-cache findutils curl php83-cli php83-phar php-fpm \
 	php-mysqli php-json	php-curl php-gd php-xml php-mbstring php-zip \
 	php-opcache \
 	&& addgroup -g ${GID} www-usr \

@@ -21,6 +21,11 @@ WP_USR_PW="$(cat "$WP_USR_PW")"
 WP_ADMIN_MAIL="$(cat "$WP_ADMIN_MAIL")"
 WP_DB_PW="$(cat "$WORDPRESS_DB_PASSWORD")"
 
+curl -sSfLo /home/utils/wp/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar || error "Failed to download wp-cli"
+
+chmod +x /home/utils/wp/wp-cli.phar &&
+	mv /home/utils/wp/wp-cli.phar /home/utils/wp/wp
+
 if [ -z "$(ls -A /var/www/html)" ]; then
 	cat <<-EOF
 		Wordpress volume is empty. 
@@ -28,46 +33,46 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 	EOF
 
 	curl -sSfLo /home/utils/wp/latest.tar.gz https://wordpress.org/latest.tar.gz || error "Failed to download Wordpress"
-	curl -sSfLo /home/utils/wp/wp-cli.phar https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar || error "Failed to download wp-cli"
-
-
-	chmod +x /home/utils/wp/wp-cli.phar
 
 	cat <<-EOF
 		Extracting latest.tar.gz into Wordpress volume [/var/www/html]
 	EOF
 
-	tar -xvzf /home/utils/wp/latest.tar.gz -C /var/www/html --strip-components=1 || error "Failed to extract WordPress"
+	tar -xvzf /home/utils/wp/latest.tar.gz \
+		-C /var/www/html \
+		--strip-components=1 || error "Failed to extract WordPress"
 
-	cat <<-EOF
-		Removing latest.tar.gz
-	EOF
+	echo "Removing latest.tar.gz"
 	rm /home/utils/wp/latest.tar.gz
 
+	cd /var/www/html
 	wp config create \
-		--path=/var/www/html \
 		--dbhost="${WORDPRESS_DB_HOST}" \
 		--dbname="${WORDPRESS_DB_NAME}" \
 		--dbuser="${WORDPRESS_DB_USER}" \
-		--dbpass="${WP_DB_PW}"
-
-	if ! wp core is-installed --path=/var/www/html --allow-root; then
+		--dbpass="${WP_DB_PW}" \
+		--extra-php <<-PHP
+			if ( defined ('WP_CLI' ) && WP_CLI && ! isset( \$_SERVER['HTTP_HOST'] ) ) {
+				\$_SERVER['HTTP_HOST'] = 'localhost';
+			}
+		PHP
+	if ! wp core is-installed; then
 
 		wp core install \
-			--path=/var/www/html \
 			--url=cdomet-d.42.fr \
 			--title="cdomet-d's blog" \
 			--admin_email="$WP_ADMIN_MAIL" \
 			--admin_user=wpsu --admin_password="$WP_ADMIN_PW" \
-			--allow-root \
 			--skip-email
 
 		wp user create serendipity serendipity@example.fr \
-		--role=author \
-		--user_pass="$WP_USR_PW" \
-		--display_name=Serendipity \
-		--path=/var/www/html \
-		--allow-root
+			--role=author \
+			--user_pass="$WP_USR_PW" \
+			--display_name=Serendipity
+
+		wp theme install bjork --activate
+		wp plugin list --field=name | xargs wp plugin delete
+
 	fi
 
 else
@@ -77,4 +82,5 @@ else
 	EOF
 fi
 
+cd /var/www/html
 exec "$@"
