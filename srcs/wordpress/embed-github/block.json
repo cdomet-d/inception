@@ -1,0 +1,281 @@
+{
+	"apiVersion": "1",
+	"name": "ghb/github",
+	"title": "Embed Github",
+	"description": "Embed your GitHub repositories on WordPress.",
+	"category": "widgets",
+	"keywords": [
+		"github",
+		"github embed",
+		"github repositories"
+	],
+	"textdomain": "github",
+	"attributes": {
+		"align": {
+			"type": "string",
+			"default": "wide"
+		},
+		"cId": {
+			"type": "string",
+			"default": ""
+		},
+		"layout": {
+			"type": "string",
+			"default": "default"
+		},
+		"userName": {
+			"type": "string",
+			"default": ""
+		},
+		"elements": {
+			"type": "object",
+			"default": {
+				"logo": true,
+				"repoName": true,
+				"desc": true,
+				"download": true,
+				"topic": true,
+				"pagination": true,
+				"masonry": false
+			}
+		},
+		"query": {
+			"type": "object",
+			"default": {
+				"postsPerPage": 8
+			}
+		},
+		"columns": {
+			"type": "object",
+			"default": {
+				"desktop": 3,
+				"tablet": 2,
+				"mobile": 1
+			}
+		},
+		"columnGap": {
+			"type": "string",
+			"default": "30px"
+		},
+		"rowGap": {
+			"type": "string",
+			"default": "40px"
+		},
+		"background": {
+			"type": "object",
+			"default": {
+				"color": "#000"
+			}
+		},
+		"padding": {
+			"type": "object",
+			"default": {
+				"top": "20px",
+				"right": "20px",
+				"bottom": "20px",
+				"left": "20px"
+			}
+		},
+		"cardBG": {
+			"type": "object",
+			"default": {
+				"color": "#000"
+			}
+		},
+		"cardPadding": {
+			"type": "object",
+			"default": {
+				"top": "35px",
+				"right": "20px",
+				"bottom": "35px",
+				"left": "20px"
+			}
+		},
+		"cardBorder": {
+			"type": "object",
+			"default": {
+				"color": "#222",
+				"style": "solid",
+				"width": "1px"
+			}
+		},
+		"githubIcon": {
+			"type": "object",
+			"default": {
+				"size": 35,
+				"color": "#fff"
+			}
+		},
+		"nameTypo": {
+			"type": "object",
+			"default": {
+				"fontSize": {
+					"desktop": 16,
+					"tablet": 15,
+					"mobile": 15
+				},
+				"fontWeight": 400,
+				"lineHeight": "135%"
+			}
+		},
+		"nameColor": {
+			"type": "string",
+			"default": "#df0e84"
+		},
+		"descTypo": {
+			"type": "object",
+			"default": {
+				"fontSize": {
+					"desktop": 15,
+					"tablet": 15,
+					"mobile": 15
+				},
+				"fontWeight": 400,
+				"lineHeight": "135%"
+			}
+		},
+		"descColor": {
+			"type": "string",
+			"default": "#ccc"
+		},
+		"downloadBtnTypo": {
+			"type": "object",
+			"default": {
+				"fontSize": {
+					"desktop": 16,
+					"tablet": 15,
+					"mobile": 15
+				},
+				"fontWeight": 400,
+				"lineHeight": "135%"
+			}
+		},
+		"downloadBtnColors": {
+			"type": "object",
+			"default": {
+				"color": "#fff",
+				"bg": "#000"
+			}
+		},
+		"downloadBtnPadding": {
+			"type": "object",
+			"default": {
+				"top": "4px",
+				"right": "8px",
+				"bottom": "4px",
+				"left": "8px"
+			}
+		},
+		"downloadBtnBorder": {
+			"type": "object",
+			"default": {
+				"color": "#222",
+				"style": "solid",
+				"width": "1px"
+			}
+		},
+		"pageBtnTypo": {
+			"type": "object",
+			"default": {
+				"fontSize": {
+					"desktop": 16,
+					"tablet": 15,
+					"mobile": 15
+				},
+				"fontWeight": 400,
+				"lineHeight": "135%"
+			}
+		},
+		"pageBtnColors": {
+			"type": "object",
+			"default": {
+				"color": "#fff",
+				"bg": "#000"
+			}
+		},
+		"pageBtnActiveColors": {
+			"type": "object",
+			"default": {
+				"color": "#000",
+				"bg": "#fff"
+			}
+		},
+		"pageBtnBorder": {
+			"type": "object",
+			"default": {
+				"color": "#eee",
+				"style": "solid",
+				"width": "1px"
+			}
+		},
+		"modalBtnTypo": {
+			"type": "object",
+			"default": {
+				"fontSize": {
+					"desktop": 15,
+					"tablet": 15,
+					"mobile": 15
+				},
+				"fontWeight": 400,
+				"lineHeight": "135%"
+			}
+		},
+		"modalBtnColors": {
+			"type": "object",
+			"default": {
+				"color": "#fff",
+				"bg": "#df0e84"
+			}
+		},
+		"modalBtnHoverColors": {
+			"type": "object",
+			"default": {
+				"color": "#fff",
+				"bg": "#000"
+			}
+		},
+		"modalBtnPadding": {
+			"type": "object",
+			"default": {
+				"top": "8px",
+				"right": "25px",
+				"bottom": "8px",
+				"left": "25px"
+			}
+		},
+		"modalBtnBorder": {
+			"type": "object",
+			"default": {
+				"color": "#df0e84",
+				"style": "solid",
+				"width": "1px"
+			}
+		},
+		"modalBtnHoverBorder": {
+			"type": "object",
+			"default": {
+				"color": "#eee",
+				"style": "solid",
+				"width": "1px"
+			}
+		}
+	},
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"html": false
+	},
+	"example": {
+		"attributes": {
+			"preview": true,
+			"columns": {
+				"desktop": 1,
+				"tablet": 1,
+				"mobile": 1
+			}
+		}
+	},
+	"editorScript": "file:dist/editor.js"
+}

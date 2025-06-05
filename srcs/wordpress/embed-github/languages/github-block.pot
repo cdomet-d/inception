@@ -1,0 +1,231 @@
+# Copyright (C) 2024 bPlugins
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Embed Repo For Github 1.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/embed-github\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-30T04:30:31+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: embed-github\n"
+
+#. Plugin Name of the plugin
+#: D:\wda-alamin\www\wordpress\wp-content\plugins\embed-github\index.php
+msgid "Embed Repo For Github"
+msgstr ""
+
+#. Description of the plugin
+#: D:\wda-alamin\www\wordpress\wp-content\plugins\embed-github\index.php
+msgid "Embed your GitHub repositories on WordPress."
+msgstr ""
+
+#. Author of the plugin
+#: D:\wda-alamin\www\wordpress\wp-content\plugins\embed-github\index.php
+msgid "bPlugins"
+msgstr ""
+
+#. Author URI of the plugin
+#: D:\wda-alamin\www\wordpress\wp-content\plugins\embed-github\index.php
+msgid "http://bplugins.com"
+msgstr ""
+
+#: bplugins_sdk/inc/Base/License.php:44
+#: bplugins_sdk/inc/Base/License.php:100
+msgid "Deactivate License"
+msgstr ""
+
+#: bplugins_sdk/inc/Base/License.php:44
+#: bplugins_sdk/inc/Base/License.php:75
+#: bplugins_sdk/inc/Base/License.php:103
+msgid "Activate License"
+msgstr ""
+
+#: bplugins_sdk/inc/Base/License.php:45
+msgid "Upgrade to Pro"
+msgstr ""
+
+#: bplugins_sdk/inc/Base/License.php:79
+msgid "Please enter the license key you received after purchase:"
+msgstr ""
+
+#: bplugins_sdk/inc/Base/License.php:90
+msgid "Remove Data"
+msgstr ""
+
+#: bplugins_sdk/inc/Base/License.php:91
+msgid "I agree to send website URL, email, and License key to verify the license."
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11659
+msgid "Github Username"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11666
+msgid "Fetch Data"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11671
+msgid "Repositories Info"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11673
+msgid "Logo"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11675
+#: dist/editor.js:11749
+msgid "Name"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11677
+#: dist/editor.js:11758
+msgid "Description"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11679
+msgid "Download Button"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11681
+msgid "Topic"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11685
+#: dist/editor.js:11687
+#: dist/editor.js:11780
+msgid "Pagination"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11689
+msgid "Repositories  Per Page"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11696
+msgid "Layout"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11703
+msgid "Column Gap:"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11706
+msgid "Row Gap:"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11710
+msgid "Columns:"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11721
+msgid "Wrapper"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11722
+#: dist/editor.js:11728
+msgid "Background:"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11724
+#: dist/editor.js:11730
+#: dist/editor.js:11773
+#: dist/editor.js:11803
+msgid "Padding"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11727
+msgid "Card"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11732
+#: dist/editor.js:11775
+#: dist/editor.js:11787
+#: dist/editor.js:11799
+msgid "Border"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11736
+msgid "Icon"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11738
+msgid "Size"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11743
+#: dist/editor.js:11752
+#: dist/editor.js:11761
+msgid "Color"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11750
+#: dist/editor.js:11759
+#: dist/editor.js:11769
+#: dist/editor.js:11781
+#: dist/editor.js:11793
+msgid "Typography"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11767
+msgid "Download Button & Topic"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11771
+#: dist/editor.js:11783
+#: dist/editor.js:11795
+msgid "Colors"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11785
+msgid "Active Colors"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11792
+msgid "Modal Button"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11797
+msgid "Hover Colors"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:11801
+msgid "Hover Border"
+msgstr ""
+
+#: dist/editor.js:1
+#: dist/editor.js:16818
+msgid "Please Insert Your Github Username And Fetch Data"
+msgstr ""

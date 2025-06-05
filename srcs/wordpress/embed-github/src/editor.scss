@@ -1,0 +1,25 @@
+$primaryColor: #4527a4;
+
+// Custom
+.bdbNowEditing {
+	outline: 2px solid $primaryColor;
+}
+
+.ghbTabPanel {
+
+	.ghbInput {
+		width: 150px;
+	}
+
+	.ghbBtn {
+		height: 30px;
+		border: 1px solid #4527a4;
+		font-size: 14px;
+		padding: 2px 3px;
+		color: #000;
+		width: 84px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}

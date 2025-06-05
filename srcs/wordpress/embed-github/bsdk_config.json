@@ -1,0 +1,10 @@
+{
+  "prefix": "ghbpro",
+  "permalinks": {
+    "ghbpro": ""
+  },
+  "features": {
+    "license": false,
+    "optIn": true
+  }
+}

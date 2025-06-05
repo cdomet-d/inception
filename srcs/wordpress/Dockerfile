@@ -4,23 +4,25 @@ ARG GID
 
 ENV UID=$UID
 ENV GID=$GID
-ENV PATH="/home/utils/wp:${PATH}"
+ENV PATH="/home/www-usr/utils/wp:${PATH}"
 
 RUN apk add --update --no-cache findutils curl php83-cli php83-phar php-fpm \
 	php-mysqli php-json	php-curl php-gd php-xml php-mbstring php-zip \
 	php-opcache \
 	&& addgroup -g ${GID} www-usr \
 	&& adduser -D -u ${UID} -G www-usr www-usr \
-	&& mkdir -p /var/www/html /home/utils/wp
+	&& mkdir -p /var/www/html /home/www-usr/utils/wp
 
 COPY www.conf /etc/php83/php-fpm.d/www.conf
-COPY entrypoint-wp.sh /home/utils/wp/entrypoint-wp.sh
+COPY entrypoint-wp.sh /home/www-usr/utils/wp
+COPY bjork /home/www-usr/utils/wp/bjork
+COPY embed-github /home/www-usr/utils/wp/embed-github
+COPY uploads /home/www-usr/utils/wp/uploads
 
-RUN chown ${UID}:${GID} /home/utils/wp/entrypoint-wp.sh \
-	&& chmod 700 /home/utils/wp/entrypoint-wp.sh \
-	&& chown -R ${UID}:${GID} /var/www/html /var/log/php83 /home/utils/wp
+RUN chown -R ${UID}:${GID} /home/www-usr/utils/wp/ /var/www/html/ /var/log/php83 \
+	&& chmod 700 /home/www-usr/utils/wp/entrypoint-wp.sh
 
-ENTRYPOINT ["/home/utils/wp/entrypoint-wp.sh"]
+ENTRYPOINT ["/home/www-usr/utils/wp/entrypoint-wp.sh"]
 
 USER ${UID}:${GID}
 

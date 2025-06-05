@@ -72,7 +72,7 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp-manager
     healthcheck:
-      test: ["CMD", "/healthcheck.sh"]
+      test: ["CMD", "/utils/healthcheck.sh"]
       interval: 2s
       timeout: 2s
       retries: 10

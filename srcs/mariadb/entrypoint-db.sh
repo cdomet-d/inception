@@ -18,17 +18,19 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 	echo "Running MariaDB initialization..."
 
 	mariadb-install-db \
-	--user="${UID}" \
-	--datadir=/var/lib/mysql > /var/log/mysql/mariadb-install.log \
-	|| error "During maria-db initialisation"
+		--user="${UID}" \
+		--datadir=/var/lib/mysql >/var/log/mysql/mariadb-install.log ||
+		error "During maria-db initialisation"
 
 	echo "MariaDB init complete"
 
 	su-exec "${UID}:${GID}" mysqld &
 
-	sleep 5
+	until mysqladmin ping -h "localhost" --silent; do
+		sleep 1
+	done
 
-	mysql -u root <<-EOSQL 2>&1 > /dev/null
+	mysql -u root <<-EOSQL 2>&1 >/dev/null
 		-- set root password
 		ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PW}';
 		-- remove any anonymous users
@@ -45,7 +47,9 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 		FLUSH PRIVILEGES;
 	EOSQL
 
-	echo "Finished bootstrap"
+	echo "Finished table creation!"
+
+	mysql -u "${MYSQL_USER}" -p"$USER_PW" "${MYSQL_DATABASE}" < /utils/dump.sql
 
 	mysqladmin -u root -p"$ROOT_PW" shutdown
 

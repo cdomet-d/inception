@@ -3,7 +3,7 @@ all: stop
 	@echo "GID=$$(id -g)" >> .env
 	docker compose build
 
-re: fclean all
+re: fclean all run
 
 clean:
 	docker system prune -f
@@ -19,8 +19,3 @@ run: all
 stop:
 	docker compose stop
 	docker compose down
-
-wpscript: stop all run
-
-dbinstall : fclean all
-	docker compose run --rm -it db sh
