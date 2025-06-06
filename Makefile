@@ -6,6 +6,7 @@ all: stop
 re: fclean all
 
 clean: stop
+	rm *.log
 	@docker system prune -f
 
 make fclean: stop

@@ -25,13 +25,21 @@ The [QEMU](https://www.qemu.org/docs/master/about/index.html) (also on [Github](
 
 > Thanks to [@bbischof](https://github.com/B-Bischoff) for his help in understanding what the fuck hardware virtualization means :).
 
+### Docker
+
+Docker is an abstraction layer leveraging kernel container primitives to provide developpers with a standardized working environnement. As long as the kernel is compatible, it is possible to generate and **image** in which you can install everything your application needs. It also allows to ship applications in a self-contained way, limiting unused dependancies and bloat.
+
+An image is a prepackaged configuration file 
+
+
+
 ## Reading
 
 ### Misc
 
 - Blog [FR] - [A nice DevOps blog full of ressources I'm keeping for later](https://blog.stephane-robert.info/)
 - Obscure Polish Class Slides [EN] - [Logic knowledge representation](https://www.mimuw.edu.pl/~wjaworski/RW/1_logika_eng.pdf)
-- **Why do we care about this ?** At some point in my researched, I ran into the phrase "logical representation of an hardware component". As this means fuckall to me, I've endeavored to understand what *logic representation* means. Turns out it's part of [knowdledge representation](https://en.wikipedia.org/wiki/Knowledge_representation_and_reasoning), a pretty important skill to have when working as a programmer: it's basically the science of translating human knowledge into something a computer can understand, making the design and construction of complex systems easier.
+  - **Why do we care about this ?** At some point in my researched, I ran into the phrase "logical representation of an hardware component". As this means fuckall to me, I've endeavored to understand what *logic representation* means. Turns out it's part of [knowdledge representation](https://en.wikipedia.org/wiki/Knowledge_representation_and_reasoning), a pretty important skill to have when working as a programmer: it's basically the science of translating human knowledge into something a computer can understand, making the design and construction of complex systems easier.
 
 ### Emulation
 
