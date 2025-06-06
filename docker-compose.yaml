@@ -18,11 +18,11 @@ services:
       - cert.pem
       - key.pem
     depends_on:
-      - wp
+      - wordpress
     networks:
       - inception
 
-  wp:
+  wordpress:
     restart: unless-stopped
     build:
       args:
@@ -31,13 +31,13 @@ services:
       context: ./srcs/wordpress/
       dockerfile: Dockerfile
     depends_on:
-      db:
+      mariadb:
         condition: service_healthy
-    image: inception-wp
+    image: inception-wordpress
     volumes:
       - /home/cdomet-d/data/wp-data:/var/www/html
     environment:
-      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_PASSWORD: /run/secrets/db-usr-pw
       WORDPRESS_DB_USER: wp-manager
@@ -52,7 +52,7 @@ services:
     networks:
       - inception
 
-  db:
+  mariadb:
     restart: unless-stopped
     build:
       args:

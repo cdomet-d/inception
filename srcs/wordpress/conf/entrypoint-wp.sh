@@ -23,9 +23,11 @@ WP_DB_PW="$(cat "$WORDPRESS_DB_PASSWORD")"
 
 if [ -z "$(ls -A /var/www/html)" ]; then
 	cat <<-EOF
+
 		Wordpress volume is empty. 
 		Downloading Wordpress from https://wordpress.org/latest.tar.gz...
 		Installing CLI from https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar...
+
 	EOF
 
 	curl -sSfLo /home/www-usr/utils/wp/latest.tar.gz https://wordpress.org/latest.tar.gz || error "Failed to download Wordpress"
@@ -35,42 +37,55 @@ if [ -z "$(ls -A /var/www/html)" ]; then
 
 	tar -xvzf /home/www-usr/utils/wp/latest.tar.gz \
 		-C /var/www/html \
-		--strip-components=1 || error "Failed to extract WordPress"
+		--strip-components=1 >/dev/null || error "Failed to extract WordPress"
 
 	echo "Removing latest.tar.gz"
 	rm /home/www-usr/utils/wp/latest.tar.gz
+
 	cat <<-EOF
-		Installation successfull. Setting up Wordpress website...
+
+		Installation successfull. Deploying WordPress site...
 	EOF
 
 	mv /home/www-usr/utils/wp/bjork /var/www/html/wp-content/themes
 	mv /home/www-usr/utils/wp/embed-github /var/www/html/wp-content/plugins
 	mv /home/www-usr/utils/wp/uploads /var/www/html/wp-content/uploads
 
+	cat <<-EOF
+
+		Success: theme imported.
+		Creating configuration...
+
+	EOF
+
 	cd /var/www/html
+	wp config create \
+		--dbhost="${WORDPRESS_DB_HOST}" \
+		--dbname="${WORDPRESS_DB_NAME}" \
+		--dbuser="${WORDPRESS_DB_USER}" \
+		--dbpass="${WP_DB_PW}" \
+		--extra-php <<-PHP
+			if ( defined ('WP_CLI' ) && WP_CLI && ! isset( \$_SERVER['HTTP_HOST'] ) ) {
+				\$_SERVER['HTTP_HOST'] = 'localhost';
+			}
+		PHP
 
-	if ! wp core is-installed; then
+	wp theme delete --all
+	wp plugin list --status=inactive --field=name | xargs wp plugin delete
 
-		wp config create \
-			--dbhost="${WORDPRESS_DB_HOST}" \
-			--dbname="${WORDPRESS_DB_NAME}" \
-			--dbuser="${WORDPRESS_DB_USER}" \
-			--dbpass="${WP_DB_PW}" \
-			--extra-php <<-PHP
-				if ( defined ('WP_CLI' ) && WP_CLI && ! isset( \$_SERVER['HTTP_HOST'] ) ) {
-					\$_SERVER['HTTP_HOST'] = 'localhost';
-				}
-			PHP
+	cat <<-EOF
 
-		wp theme delete --all
-		wp plugin list --status=inactive --field=name | xargs wp plugin delete
-		echo "Configuration is done!"
-	fi
+		Success: configuration complete !
+		Launching php-fpm83...
+
+	EOF
 
 else
 	cat <<-EOF
-		Volume is already populated
-		Exiting...
+
+		WordPress site is ready.
+		Launching php-fpm83...
+
 	EOF
 fi
 

@@ -15,14 +15,23 @@ ROOT_PW="$(cat "$MYSQL_ROOT_PASSWORD_FILE")"
 USER_PW="$(cat "$MYSQL_PASSWORD_FILE")"
 
 if [ -z "$(ls -A /var/lib/mysql)" ]; then
-	echo "Running MariaDB initialization..."
+	cat <<-EOF
+
+		No MariaDB installation found.
+		Running MariaDB installation...
+
+	EOF
 
 	mariadb-install-db \
 		--user="${UID}" \
 		--datadir=/var/lib/mysql >/var/log/mysql/mariadb-install.log ||
 		error "During maria-db initialisation"
 
-	echo "MariaDB init complete"
+	cat <<-EOF
+
+		Successfully installed MariaDB
+
+	EOF
 
 	su-exec "${UID}:${GID}" mysqld &
 
@@ -47,19 +56,38 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 		FLUSH PRIVILEGES;
 	EOSQL
 
-	echo "Finished table creation!"
+	cat <<-EOF
 
-	mysql -u "${MYSQL_USER}" -p"$USER_PW" "${MYSQL_DATABASE}" < /utils/dump.sql
+		Success: initialized table ${MYSQL_DATABASE}
+		Success: created database user ${MYSQL_USER}
+		Restoring website database...
 
-	mysqladmin -u root -p"$ROOT_PW" shutdown
+	EOF
+
+	mysql -u "${MYSQL_USER}" -p"$USER_PW" "${MYSQL_DATABASE}" </utils/dump.sql
 
 	cat <<-EOF
 
-		Sucessfully initialized ${MYSQL_DATABASE}
-		Successfully created user ${MYSQL_USER}
+		Success: restored cdomet-d.42.fr
+		Killing mysqld...
+
+	EOF
+
+	mysqladmin -u root -p"$ROOT_PW" shutdown
+	cat <<-EOF
+
+		Success: configuration complete !
+		Launching mysqld...
 
 	EOF
 
 fi
+
+cat <<-EOF
+
+	Database is ready.
+	Launching mysqld...
+
+EOF
 
 exec su-exec "${UID}:${GID}" "$@"

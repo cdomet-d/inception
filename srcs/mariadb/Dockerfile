@@ -11,8 +11,8 @@ RUN apk add --update --no-cache mariadb mariadb-client su-exec \
 	&& mkdir -p /utils /run/mysqld /var/log/mysql /var/lib/mysql \
 	&& chown -R ${UID}:${GID} /run/mysqld /var/lib/mysql /var/log/mysql
 
-COPY entrypoint-db.sh healthcheck.sh dump.sql /utils/
-COPY my.cnf /etc/my.cnf.d/mariadb-server.cnf
+COPY ./conf/entrypoint-db.sh ./conf/healthcheck.sh ./db_dump/dump.sql /utils/
+COPY ./conf/my.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 RUN chown ${UID}:${GID} /utils/entrypoint-db.sh /utils/healthcheck.sh /utils/dump.sql \
 	&& chmod 700 /utils/entrypoint-db.sh /utils/healthcheck.sh
@@ -21,4 +21,4 @@ EXPOSE 3306
 
 ENTRYPOINT ["/utils/entrypoint-db.sh"]
 
-CMD ["mysqld", "--user=${UID}"]
+CMD ["mysqld"]
