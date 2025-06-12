@@ -8,8 +8,8 @@ error() {
 	exit 1
 }
 
-[ -s "$MYSQL_PASSWORD_FILE" ] || error "Missing or empty database user password file"
+[ -s /run/secrets/db-usr-pw ] || error "Missing or empty database user password file"
 
-DBPW="$(cat "$MYSQL_PASSWORD_FILE")"
+DBPW="$(cat /run/secrets/db-usr-pw)"
 
 mysql --host=localhost --user="$MYSQL_USER" --password="$DBPW" --database="$MYSQL_DATABASE" -e 'SELECT 1'

@@ -21,6 +21,4 @@ EXPOSE 3306
 
 ENTRYPOINT ["/utils/entrypoint-db.sh"]
 
-USER ${UID}:${GID}
-
 CMD ["mysqld"]

@@ -37,18 +37,17 @@ services:
     volumes:
       - /home/cdomet-d/data/wp-data:/var/www/html
     environment:
+      URL: cdomet-d.42.fr
       WORDPRESS_DB_HOST: mariadb:3306
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_DB_PASSWORD: /run/secrets/db-usr-pw
       WORDPRESS_DB_USER: wp-manager
-      WP_ADMIN_MAIL: /run/secrets/wp-su-mail
-      WP_ADMIN_PW: /run/secrets/wp-su-pw
-      WP_USR_PW: /run/secrets/wp-usr-pw
+      WP_SUPERUSER: wpsu
     secrets:
       - db-usr-pw
       - wp-su-mail
       - wp-su-pw
       - wp-usr-pw
+      - dump.sql
     networks:
       - inception
 
@@ -64,11 +63,11 @@ services:
     secrets:
       - db-root-pw
       - db-usr-pw
+      - dump.sql
     volumes:
       - /home/cdomet-d/data/mdb-data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db-root-pw
-      MYSQL_PASSWORD_FILE: /run/secrets/db-usr-pw
+      URL: cdomet-d.42.fr
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wp-manager
     healthcheck:
@@ -99,5 +98,5 @@ secrets:
     file: ~/docker-secrets/cert.pem
   key.pem: 
     file: ~/docker-secrets/key.pem
-  dump:
+  dump.sql:
     file: ~/docker-secrets/dump.sql
