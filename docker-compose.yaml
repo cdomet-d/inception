@@ -9,7 +9,7 @@ services:
         GID: ${GID}
       context: ./srcs/nginx/
       dockerfile: Dockerfile
-    image: inception-nginx
+    image: inception-nginx:1.0.0
     ports:
       - "443:443"
     volumes:
@@ -33,7 +33,7 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    image: inception-wordpress
+    image: inception-wordpress:1.0.0
     volumes:
       - /home/cdomet-d/data/wp-data:/var/www/html
     environment:
@@ -60,7 +60,7 @@ services:
         GID: ${GID}
       context: ./srcs/mariadb
       dockerfile: Dockerfile
-    image: inception-mariadb
+    image: inception-mariadb:1.0.0
     secrets:
       - db-root-pw
       - db-usr-pw
@@ -99,3 +99,5 @@ secrets:
     file: ~/docker-secrets/cert.pem
   key.pem: 
     file: ~/docker-secrets/key.pem
+  dump:
+    file: ~/docker-secrets/dump.sql

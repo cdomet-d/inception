@@ -19,7 +19,6 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 
 		No MariaDB installation found.
 		Running MariaDB installation...
-
 	EOF
 
 	mariadb-install-db \
@@ -33,13 +32,14 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 
 	EOF
 
-	su-exec "${UID}:${GID}" mysqld &
+	# su-exec
+	mysqld --user=mysql &
 
 	until mysqladmin ping -h "localhost" --silent; do
 		sleep 1
 	done
 
-	mysql -u root <<-EOSQL 2>&1 >/dev/null
+	mysql <<-EOSQL 2>&1 >/dev/null
 		-- set root password
 		ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PW}';
 		-- remove any anonymous users
@@ -64,10 +64,9 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 
 	EOF
 
-	mysql -u "${MYSQL_USER}" -p"$USER_PW" "${MYSQL_DATABASE}" </utils/dump.sql
+	mysql -u "${MYSQL_USER}" -p"$USER_PW" "${MYSQL_DATABASE}" </run/secrets/dump.sql
 
 	cat <<-EOF
-
 		Success: restored cdomet-d.42.fr
 		Killing mysqld...
 
@@ -81,13 +80,14 @@ if [ -z "$(ls -A /var/lib/mysql)" ]; then
 
 	EOF
 
+else
+	cat <<-EOF
+
+		Database is ready.
+		Launching mysqld...
+
+	EOF
 fi
 
-cat <<-EOF
-
-	Database is ready.
-	Launching mysqld...
-
-EOF
-
-exec su-exec "${UID}:${GID}" "$@"
+exec "$@"
+# su-exec "${UID}:${GID}"
