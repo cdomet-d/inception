@@ -1,6 +1,3 @@
-
-.PHONY: help
-
 help:
 	@echo "Welcome to Inception!"
 	@echo
@@ -22,20 +19,18 @@ help:
 	@echo "	         generates the logs"
 	@echo "	stop     stops & downs containers"
 
-all: stop
+all: setenv stop
 	touch ~/docker-secrets/dump.sql
 	@mkdir -p /home/cdomet-d/data/wp-data/
 	@mkdir -p /home/cdomet-d/data/mdb-data/
-	@echo "UID=$$(id -u)" > ~/env-files/.env
-	@echo "GID=$$(id -g)" >> ~/env-files/.env
+	echo "UID=$$(id -u)" > ~/env-files/.env
+	echo "GID=$$(id -g)" >> ~/env-files/.env
 	docker compose -f ./srcs/docker-compose.yaml build
 
-backup: stop
+backup: setenv stop
 	cat < ~/backup.sql > ~/docker-secrets/dump.sql
-	@mkdir -p /home/cdomet-d/data/wp-data/
-	@mkdir -p /home/cdomet-d/data/mdb-data/
-	@echo "UID=$$(id -u)" > ~/env-files/.env
-	@echo "GID=$$(id -g)" >> ~/env-files/.env
+
+
 	docker compose -f ./srcs/docker-compose.yaml build
 
 re: fclean all
@@ -61,4 +56,8 @@ run: stop
 stop:
 	@docker compose -f ./srcs/docker-compose.yaml stop
 	@docker compose -f ./srcs/docker-compose.yaml down
-.PHONY: help all re clean fclean run stop
+
+setenv:
+	sh setenv.sh
+
+.PHONY: help all re clean fclean run stop backup reback

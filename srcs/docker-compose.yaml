@@ -34,9 +34,7 @@ services:
       mariadb:
         condition: service_healthy
     image: wordpress:1.0.0
-    env_file:
-      - path: ~/env-files/wp.env
-      - path: ~/env-files/.env
+    env_file: "./wordpress/wp.env"
     volumes:
       - /home/cdomet-d/data/wp-data:/var/www/html
     secrets:
@@ -57,9 +55,7 @@ services:
       context: ./mariadb
       dockerfile: Dockerfile
     image: mariadb:1.0.0
-    env_file:
-      - path: ~/env-files/wp.env
-      - path: ~/env-files/.env
+    env_file: "./mariadb/db.env"
     secrets:
       - db-root-pw
       - db-usr-pw
