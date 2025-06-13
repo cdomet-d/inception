@@ -18,6 +18,7 @@ help:
 	@echo "	run      ups the containers in detached mode (docker compose up -d) and"
 	@echo "	         generates the logs"
 	@echo "	stop     stops & downs containers"
+	@echo
 
 all: setenv stop
 	@sh .scripts/check-volumes.sh
