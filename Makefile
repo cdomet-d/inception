@@ -27,8 +27,8 @@ all: stop
 	ls ~/docker-secrets
 	@mkdir -p /home/cdomet-d/data/wp-data/
 	@mkdir -p /home/cdomet-d/data/mdb-data/
-	@echo "UID=$$(id -u)" > .env
-	@echo "GID=$$(id -g)" >> .env
+	@echo "UID=$$(id -u)" > ~/env-files/env
+	@echo "GID=$$(id -g)" >> ~/env-files/env
 	docker compose -f ./srcs/docker-compose.yaml build
 
 backup: stop
