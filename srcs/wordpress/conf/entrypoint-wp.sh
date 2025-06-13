@@ -21,8 +21,6 @@ WP_ADMIN_PW="$(cat /run/secrets/wp-su-pw)"
 WP_DB_PW="$(cat /run/secrets/db-usr-pw)"
 WP_USR_PW="$(cat /run/secrets/wp-usr-pw)"
 
-echo "Entrypoint running as: $(whoami)"
-
 if [ -z "$(ls -A /var/www/html)" ]; then
 	cat <<-EOF
 		Wordpress volume is empty.

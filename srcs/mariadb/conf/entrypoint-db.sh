@@ -1,5 +1,6 @@
 #!/bin/sh
 #db-init.sh
+# shellcheck disable=SC3028
 
 set -eu
 

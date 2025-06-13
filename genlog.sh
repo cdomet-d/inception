@@ -3,6 +3,6 @@
 
 mkdir -p ./logs
 
-docker compose logs nginx >./logs/check-nginx.log
-docker compose logs mariadb >./logs/check-db.log
-docker compose logs wordpress >./logs/check-wp.log
+docker compose -f ./srcs/docker-compose.yaml logs nginx >./logs/check-nginx.log
+docker compose -f ./srcs/docker-compose.yaml logs mariadb >./logs/check-db.log
+docker compose -f ./srcs/docker-compose.yaml logs wordpress >./logs/check-wp.log
