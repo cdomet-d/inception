@@ -20,30 +20,38 @@ help:
 	@echo "	stop     stops & downs containers"
 
 all: setenv stop
-	touch ~/docker-secrets/dump.sql
-	@mkdir -p /home/cdomet-d/data/wp-data/
-	@mkdir -p /home/cdomet-d/data/mdb-data/
-	echo "UID=$$(id -u)" > ~/env-files/.env
-	echo "GID=$$(id -g)" >> ~/env-files/.env
-	docker compose -f ./srcs/docker-compose.yaml build
+	@sh .scripts/check-volumes.sh
+	@echo
+	@echo "[INFO] Building vanilla images..."
+	@echo
+	@docker compose -f ./srcs/docker-compose.yaml build
 
 backup: setenv stop
-	cat < ~/backup.sql > ~/docker-secrets/dump.sql
-
-
-	docker compose -f ./srcs/docker-compose.yaml build
+	@sh .scripts/check-volumes.sh
+	@echo "[INFO] Importing database backup..."
+	@echo
+	@cat < ~/backup.sql > ~/docker-secrets/dump.sql
+	@echo "[INFO] Building images from database backup..."
+	@echo
+	@docker compose -f ./srcs/docker-compose.yaml build
 
 re: fclean all
 
 reback: fclean backup
 
 clean: stop
-	rm -rf ./logs
+	@echo "[INFO] Removing stale logs..."
+	@echo
+	@rm -rf ./logs
 	@docker system prune -f
 
 fclean: clean
-	rm -f ~/docker-secrets/dump.sql
+	@echo "[INFO] Removing database backup..."
+	@rm -f /home/cdomet-d/docker-secrets/dump.sql
+	@echo "[INFO] Removing wordpress volume..."
 	@rm -rf /home/cdomet-d/data/wp-data/*
+	@echo "[INFO] Removing database volume..."
+	@echo
 	@rm -rf /home/cdomet-d/data/mdb-data/*
 	@docker system prune -f -a
 
@@ -51,13 +59,16 @@ run: stop
 	@docker compose -f ./srcs/docker-compose.yaml up -d
 	@echo "Generating logs, please hold..."
 	@sleep 2
-	@sh genlog.sh
+	@sh .scripts/genlog.sh
 
 stop:
 	@docker compose -f ./srcs/docker-compose.yaml stop
 	@docker compose -f ./srcs/docker-compose.yaml down
 
 setenv:
-	sh setenv.sh
+	@echo
+	@echo "[INFO] Running environnement deployment script..."
+	@echo
+	@sh .scripts/setenv.sh
 
 .PHONY: help all re clean fclean run stop backup reback

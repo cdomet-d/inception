@@ -3,12 +3,16 @@
 
 WORKDIR=$(pwd)
 
-if [ ! -d /home/data/wp-data ]; then
-	mkdir -p /home/cdomet-d/data/wp-data/
+if [ ! -f  /home/"${USER}"/docker-secrets/dump.sql ]; then 
+	touch ~/docker-secrets/dump.sql
 fi
 
-if [ ! -d /home/data/wp-data ]; then
-	mkdir -p /home/cdomet-d/data/mdb-data/
+if [ ! -d /home/"${USER}"/data/wp-data ]; then
+	mkdir -p /home/"${USER}"/data/wp-data/
+fi
+
+if [ ! -d /home/"${USER}"/data/wp-data ]; then
+	mkdir -p /home/"${USER}"/data/mdb-data/
 fi
 
 if [ ! -s "$WORKDIR"/srcs/wordpress/wp.env ]; then
