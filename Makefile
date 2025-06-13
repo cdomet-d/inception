@@ -68,7 +68,6 @@ stop:
 setenv:
 	@echo
 	@echo "[INFO] Running environnement deployment script..."
-	@echo
 	@sh .scripts/setenv.sh
 
 .PHONY: help all re clean fclean run stop backup reback

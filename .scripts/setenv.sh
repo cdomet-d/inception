@@ -3,7 +3,7 @@
 
 WORKDIR=$(pwd)
 
-if [ ! -f  /home/"${USER}"/docker-secrets/dump.sql ]; then 
+if [ ! -f /home/"${USER}"/docker-secrets/dump.sql ]; then
 	touch ~/docker-secrets/dump.sql
 fi
 
@@ -30,7 +30,8 @@ if [ ! -s "$WORKDIR"/srcs/.env ]; then
 
 	echo "UID=$(id -u)" >~/env-files/.env
 	echo "GID=$(id -g)" >>~/env-files/.env
-	
+
 	echo "[INFO] Importing default environement"
+
 	cp ~/env-files/.env "$WORKDIR"/srcs
 fi
