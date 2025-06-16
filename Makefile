@@ -49,12 +49,9 @@ clean: stop
 fclean: clean
 	@echo "[INFO] Removing database backup..."
 	@rm -f /home/cdomet-d/docker-secrets/dump.sql
-	@echo "[INFO] Removing wordpress volume..."
-	@rm -rf /home/cdomet-d/data/wp-data/*
-	@echo "[INFO] Removing database volume..."
+	@echo "[INFO] Removing all system objects, including volumes..."
 	@echo
-	@rm -rf /home/cdomet-d/data/mdb-data/*
-	@docker system prune -f -a
+	docker volume rm db-data wp-data
 
 run: stop
 	@docker compose -f ./srcs/docker-compose.yaml up -d
@@ -63,8 +60,8 @@ run: stop
 	@sh .scripts/genlog.sh
 
 stop:
-	@docker compose -f ./srcs/docker-compose.yaml stop
-	@docker compose -f ./srcs/docker-compose.yaml down
+	@docker compose -f ./srcs/docker-compose.yaml stop $(docker ps -q)
+	@docker compose -f ./srcs/docker-compose.yaml down $(docker ps -q)
 
 setenv:
 	@echo

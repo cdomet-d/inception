@@ -13,7 +13,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /home/cdomet-d/data/wp-data:/var/www/html
+      - wp-data:/var/www/html
     secrets:
       - cert.pem
       - key.pem
@@ -36,7 +36,7 @@ services:
     image: wordpress:1.0.0
     env_file: "./wordpress/wp.env"
     volumes:
-      - /home/cdomet-d/data/wp-data:/var/www/html
+      - wp-data:/var/www/html
     secrets:
       - db-usr-pw
       - wp-su-mail
@@ -61,7 +61,7 @@ services:
       - db-usr-pw
       - dump.sql
     volumes:
-      - /home/cdomet-d/data/mdb-data:/var/lib/mysql
+      - db-data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "/utils/healthcheck.sh"]
       interval: 2s
@@ -74,6 +74,22 @@ networks:
   inception:
     driver: bridge
     name: inception
+
+volumes:
+  db-data:
+    name: db-data
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cdomet-d/data/mdb-data
+      o: bind
+  wp-data:
+    name: wp-data
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/cdomet-d/data/wp-data
+      o: bind
 
 secrets:
   db-root-pw:
