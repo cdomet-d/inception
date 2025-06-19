@@ -1,8 +1,6 @@
-# Testing comprehension
+# Containerization
 
-## Containerization
-
-### Single concern principle
+## Single concern principle
 
 Explain the principle of "one application per container." Why is this considered a best practice, and what issues can arise if you run multiple applications inside a single container?
 
@@ -23,7 +21,7 @@ Explain the principle of "one application per container." Why is this considered
 
 Ressource: [Single concern approach](https://www.baeldung.com/ops/one-process-per-container#5-testing-and-debugging)
 
-### Statefullness VS statelessness
+## Statefullness VS statelessness
 
 Describe the differences between a stateless and a stateful container. How does this distinction affect your approach to data persistence and backup strategies in production?
 
@@ -36,12 +34,12 @@ While statelessness is the default behavior for containers (a process pops up, r
 
 Deciding wether your containers need to be statefull or stateless is a case by case scenario, where you adapt your approach to the application being contenairized.
 
-### Security
+## Security
 
 Discuss how you would minimize the attack surface of a Docker image. What specific steps would you take during image creation to enhance security and efficiency?
 
-- **Minimal image size**: 
-  - Pick a small base image; and 
+- **Minimal image size**:
+  - Pick a small base image; and
 
 - Avoid running in root to avoid user priviledge escalation;
   - For containers that need to run root, use usernamespace to ensure that a user escaping a container will not be able to run root on the host.
@@ -50,30 +48,26 @@ Discuss how you would minimize the attack surface of a Docker image. What specif
 - Limit container connectivity by defining your own network, and never using `host` as a network, as it grants access to the host network for the containers. In the same way, be mindful about connecting containers: not every container need to be on the same network.
 - Apply the least-priviledge principle: if your container only needs to read from files, specify the image to be read-only.
 
-1) How do you ensure that the base images you use for your containers are secure and trustworthy? What tools or processes do you employ to scan for vulnerabilities?
+## Best practices
 
-2) When managing container logs and monitoring, what strategies or tools do you use to ensure observability across a multi-container deployment? How do you handle log aggregation and alerting?
+### Networking
 
-## Automated Deployment & Dockerized Applications
+Docker offer the option to use *networks* to link containers together. The containers on the same network gain the ability to communicate through service names (*ie*: `mariadb:3006`) instead of by IP.
 
-1) Describe your typical CI/CD pipeline for deploying Dockerized applications. How do you handle image building, testing, and deployment automation?
+A deprecated way to incur this behavior was with the `--link` directive. This allowed to connect containers, enabling environemment sharing. It is not recommended to use anymore, as it became cumbersome to manage (hard-linking containers between them) and posed a security threat (leaking environnement variables, lack of communication control between containers...)
 
-2) What are the benefits and potential pitfalls of using Docker Compose for orchestrating multi-container applications in development and production environments?
+The default network on Docker is a **bridge network**. It's recommended to use a user-defined bridge network to ensure full functionnality.
 
-3) How do you manage secrets (such as database passwords or API keys) in your Dockerized deployments to ensure they are not exposed in images or logs?
+To better understand the following explainations, we need a refresher on [the OSI networking model](https://en.wikipedia.org/wiki/OSI_model).
 
-4) Explain the process and reasoning behind using multi-stage builds in Docker. How does this impact image size, security, and deployment speed?
+#### OSI Network model layers
 
-5) What are some best practices for updating and rolling back containerized applications in production to minimize downtime and risk?
+![the OSI network model](assets/osi-model.png)
 
-## Database Usage and Setup (MariaDB/WordPress Context)
+### Bridge networks
 
-1) When containerizing a database like MariaDB, what are the key considerations for data persistence, backup, and recovery? How do you ensure data is not lost if a container is destroyed?
+In general, a bridge network (simply *bridge*) is a device or software that allows segmented parts of a **local** network to become assembled, forming a single and larger network.
 
-2) Describe the process you use to automate the initial setup of a WordPress database and user within a containerized environment. How do you handle idempotency and error handling in this process?
+It ressembles a router, except that it operates on the **second layer** of the OSI model, meaning that it uses MAC address (the Media Access Control Address, which is a unique hardware component used to identify a network interface), instead of IP addresses as would a router.
 
-3) How do you monitor the health and performance of your MariaDB instance running in a container? What metrics and tools do you rely on?
-
-4) Discuss the security implications of running database containers as root versus a non-root user. What configuration changes are needed to run MariaDB securely in production?
-
-5) Explain how you would migrate a WordPress site (including its database and media files) from one Dockerized environment to another, ensuring minimal downtime and data integrity.
+In the context of Docker, the bridge network is a virtual implementation of that concept. Its main purpose is to allow containers to communicates with others on the same network, all the while providing an isolation layer from the host.
