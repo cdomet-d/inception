@@ -14,8 +14,6 @@
 
 You can filter, format, or show all images using options like `-a`, `--filter`, and `--format`
 
-[Docker image ls](https://docs.docker.com/reference/cli/docker/image/ls/).
-
 - **Remove unused images (dangling):**
 
   ```sh
@@ -29,8 +27,6 @@ You can filter, format, or show all images using options like `-a`, `--filter`, 
   ```sh
   docker rmi $(docker images -q)
   ```
-
-  [Prune unused Docker objects](https://docs.docker.com/engine/manage-resources/pruning/)
 
 ### Containers
 
@@ -94,16 +90,14 @@ You can filter, format, or show all images using options like `-a`, `--filter`, 
   docker volume rm $(docker volume ls -q)
   ```
 
-[Create and manage volumes](https://docs.docker.com/engine/storage/volumes/#create-and-manage-volumes)
-
 ## Building and composing
 
 Here are some common Docker commands used to build images and compose multi-container applications:
 
 ## Building Images
 
-- **docker build**  
-  Builds a Docker image from a Dockerfile and a build context (the directory containing the Dockerfile and any files it needs).  
+- **docker build**
+  Builds a Docker image from a Dockerfile and a build context (the directory containing the Dockerfile and any files it needs).
 
   ```sh
   docker build .
@@ -115,12 +109,9 @@ Here are some common Docker commands used to build images and compose multi-cont
   docker build -t my-image:latest .
   ```
 
-  [Build, tag, and publish an image](https://docs.docker.com/get-started/docker-concepts/building-images/build-tag-and-publish-an-image/#explanation)
-
 ## Composing Images and Services
 
-- **docker compose up**  
-  Builds, (re)creates, starts, and attaches to containers for a service as defined in a `compose.yaml` file.  
+- **docker compose up** builds, (re)creates, starts, and attaches to containers for a service as defined in a `compose.yaml` file.
 
   ```sh
   docker compose up
@@ -132,10 +123,7 @@ Here are some common Docker commands used to build images and compose multi-cont
   docker compose up -d
   ```
 
-  [How Compose works: CLI](https://docs.docker.com/compose/intro/compose-application-model/#cli)
-
-- **docker compose build**  
-  Builds or rebuilds services defined in the Compose file.  
+- **docker compose build** builds or rebuilds services defined in the Compose file.
 
   ```sh
   docker compose build
@@ -154,29 +142,26 @@ Here are some common Docker commands used to build images and compose multi-cont
   docker compose build --pull
   ```
 
-  [docker compose build reference](https://docs.docker.com/reference/cli/docker/compose/build/)
-
-- **docker compose down**  
-  Stops and removes containers, networks, and other resources created by `up`.
+- **docker compose down** stops and removes containers, networks, and other resources created by `up`.
 
   ```sh
   docker compose down
   ```
 
-- **docker compose ps**  
-  Lists the containers and their status for the current Compose project.
+- **docker compose ps** lists the containers and their status for the current Compose project.
 
   ```sh
   docker compose ps
   ```
 
-- **docker compose logs**  
-  Shows logs from containers managed by Compose.
+- **docker compose logs** shows logs from containers managed by Compose.
 
   ```sh
   docker compose logs
   ```
 
-  [How Compose works: CLI](https://docs.docker.com/compose/intro/compose-application-model/#cli)
+## Sources
+
+- [How Compose works: CLI](https://docs.docker.com/compose/intro/compose-application-model/#cli)
 
 These commands are the foundation for building images and orchestrating multi-container applications with Docker Compose. For more advanced options and subcommands, see the [Compose CLI reference](https://docs.docker.com/reference/cli/docker/compose/#subcommands).

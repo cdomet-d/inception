@@ -38,9 +38,6 @@ Deciding wether your containers need to be statefull or stateless is a case by c
 
 Discuss how you would minimize the attack surface of a Docker image. What specific steps would you take during image creation to enhance security and efficiency?
 
-- **Minimal image size**:
-  - Pick a small base image; and
-
 - Avoid running in root to avoid user priviledge escalation;
   - For containers that need to run root, use usernamespace to ensure that a user escaping a container will not be able to run root on the host.
 - Do not expose containers that do not need to be exposed;

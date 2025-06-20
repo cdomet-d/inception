@@ -29,10 +29,6 @@ The [QEMU](https://www.qemu.org/docs/master/about/index.html) (also on [Github](
 
 Docker is an abstraction layer leveraging kernel container primitives to provide developpers with a standardized working environnement. As long as the kernel is compatible, it is possible to generate and **image** in which you can install everything your application needs. It also allows to ship applications in a self-contained way, limiting unused dependancies and bloat.
 
-An image is a prepackaged configuration file 
-
-
-
 ## Reading
 
 ### Misc
